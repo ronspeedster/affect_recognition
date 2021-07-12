@@ -90,6 +90,7 @@ model.add(Activation('elu'))
 model.add(BatchNormalization())
 model.add(MaxPooling2D(pool_size=(2,2)))
 model.add(Dropout(0.2))
+
 '''
 model.add(Conv2D(512,(3,3),padding='same',kernel_initializer='he_normal'))
 model.add(Activation('elu'))
@@ -100,6 +101,7 @@ model.add(BatchNormalization())
 model.add(MaxPooling2D(pool_size=(2,2)))
 model.add(Dropout(0.2))
 '''
+
 #Block-5
 
 model.add(Flatten())
@@ -146,7 +148,17 @@ reduce_lr = ReduceLROnPlateau(monitor='val_loss',
                               verbose=1,
                               min_delta=0.0001)
 '''
-checkpoint = ModelCheckpoint('EmotionDetectionModel.h5',
+
+# checkPointName = 'EmotionDetectionModel.h5'
+#quick fix to increment the file if it exists
+counter = 0
+filename = "EmotionDetectionModel{}.h5"
+while os.path.isfile(filename.format(counter)):
+    counter += 1
+checkPointName = filename.format(counter)
+#quick fix to increment the file if it exists
+
+checkpoint = ModelCheckpoint(checkPointName,
                              monitor='val_loss',
                              mode='min',
                              save_best_only=True,
